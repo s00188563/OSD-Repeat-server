@@ -7,6 +7,8 @@ const categoryRouter = require('./routes/categoryRouter');
 const vehicleRouter = require('./routes/vehicleRouter');
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 const DB = process.env.DATABASE;
 const PORT = process.env.PORT;

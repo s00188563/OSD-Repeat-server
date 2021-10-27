@@ -11,11 +11,11 @@ exports.getCategories = async (req, res) => {
 // create, delete, and update categories
 exports.createCategory = async (req, res) => {
   try {
-    const { _id, name } = req.body;
-    const existingCategory = await Category.findOne({ _id });
+    const { category_id, name } = req.body;
+    const existingCategory = await Category.findOne({ category_id });
     if (existingCategory)
       return res.status(400).json({ msg: 'This category already exists.' });
-    const newCategory = new Category({ _id, name });
+    const newCategory = new Category({ category_id, name });
     await newCategory.save();
     res.json('Created a category!');
   } catch (err) {
@@ -24,7 +24,12 @@ exports.createCategory = async (req, res) => {
 };
 exports.deleteCategory = async (req, res) => {
   try {
-    await Category.findByIdAndDelete(req.params.id);
+    const existingCategory = await Category.findOne({
+      category_id: req.params.id,
+    });
+    if (!existingCategory)
+      return res.status(400).json({ msg: 'This category does not exists.' });
+    await Category.findOneAndDelete({ category_id: req.params.id });
     res.json('Deleted a category!');
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -32,8 +37,13 @@ exports.deleteCategory = async (req, res) => {
 };
 exports.updateCategory = async (req, res) => {
   try {
+    const existingCategory = await Category.findOne({
+      category_id: req.params.id,
+    });
+    if (!existingCategory)
+      return res.status(400).json({ msg: 'This category does not exists.' });
     const { name } = req.body;
-    await Category.findByIdAndUpdate({ _id: req.params.id }, { name });
+    await Category.findOneAndUpdate({ category_id: req.params.id }, { name });
     res.json('Updated a category!');
   } catch (err) {
     res.status(500).json({ error: err.message });

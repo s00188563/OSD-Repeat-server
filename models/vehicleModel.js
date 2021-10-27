@@ -8,7 +8,7 @@ const vehicleSchema = new mongoose.Schema(
       trim: true,
       required: true,
     },
-    category: {
+    category_id: {
       type: String,
       required: true,
     },
@@ -22,11 +22,11 @@ const vehicleSchema = new mongoose.Schema(
       trim: true,
       required: true,
     },
-    content: {
+    description: {
       type: String,
       required: true,
     },
-    description: {
+    image: {
       type: Object,
       required: true,
     },
