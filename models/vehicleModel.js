@@ -8,6 +8,10 @@ const vehicleSchema = new mongoose.Schema(
       trim: true,
       required: true,
     },
+    category: {
+      type: String,
+      required: true,
+    },
     title: {
       type: String,
       trim: true,
@@ -24,10 +28,6 @@ const vehicleSchema = new mongoose.Schema(
     },
     description: {
       type: Object,
-      required: true,
-    },
-    category: {
-      type: String,
       required: true,
     },
     sold: {
