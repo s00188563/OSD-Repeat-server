@@ -55,11 +55,7 @@ exports.getVehicle = async (req, res) => {
       .sorting()
       .pagination();
     const vehicle = await features.query;
-    res.json({
-      status: 'success',
-      result: vehicle.length,
-      vehicle: vehicle,
-    });
+    res.json(vehicle);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

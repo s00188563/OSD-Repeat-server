@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 // dot env package
 require('dotenv').config();
 
@@ -19,6 +20,7 @@ mongoose
   })
   .then(() => console.log('DB connection successful'));
 
+app.use(cors());
 app.use('/api', categoryRouter);
 app.use('/api', vehicleRouter);
 
