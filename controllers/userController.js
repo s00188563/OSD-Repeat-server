@@ -25,7 +25,14 @@ class userController {
       // if everything is ok, create a new user and save to mongoDB
       const newUser = new User({ email, password: passwordHash });
       await newUser.save();
-      res.json({ newUser });
+      // 3) if everything is okay,then create tokens for authentication
+      const accessToken = createAccessToken({ id: newUser._id });
+      const user = await User.findOne(newUser.email).select('-password');
+      res.status(201).json({
+        accessToken: accessToken,
+        _id: newUser._id,
+        email: newUser.email,
+      });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -34,15 +41,25 @@ class userController {
     try {
       const { email, password } = req.body;
       // Check if existing user exists
-      const user = await User.findOne({ email });
-      if (!user) return res.status(400).json({ msg: 'User does not exist!' });
+      const existingUser = await User.findOne({ email });
+      if (!existingUser)
+        return res.status(400).json({ msg: 'User does not exist!' });
       // Password validation
-      const isMatch = await bcrypt.compare(password, user.password);
+      const isMatch = await bcrypt.compare(password, existingUser.password);
       if (!isMatch) return res.status(400).json({ msg: 'Wrong password!' });
-      res.json({ user });
+      // if everything is okay,then create tokens for authentication
+      const accessToken = createAccessToken({ id: existingUser._id });
+      res.status(201).json({
+        accessToken: accessToken,
+        _id: existingUser._id,
+        email: existingUser.email,
+      });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   }
 }
+const createAccessToken = (user) => {
+  return jwt.sign(user, process.env.JWT_ACCESS_SECRET, { expiresIn: '1d' });
+};
 module.exports = new userController();
