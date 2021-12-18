@@ -4,6 +4,7 @@ const cors = require('cors');
 // dot env package
 require('dotenv').config();
 
+const userRouter = require('./routes/userRouter');
 const categoryRouter = require('./routes/categoryRouter');
 const vehicleRouter = require('./routes/vehicleRouter');
 
@@ -23,5 +24,6 @@ mongoose
 app.use(cors());
 app.use('/api', categoryRouter);
 app.use('/api', vehicleRouter);
+app.use('/api', userRouter);
 
 app.listen(PORT);
