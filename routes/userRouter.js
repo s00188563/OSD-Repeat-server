@@ -7,6 +7,6 @@ router.post('/register', userController.register);
 router.post('/login', userController.login);
 router.get('/:userID/cart', userController.getCart);
 router.patch('/:userID/addcart', userController.addCart);
-router.patch('/:userID/updatecart', userController.updateCart);
+router.put('/:userID/updatecart', userController.updateCart);
 
 module.exports = router;
