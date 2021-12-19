@@ -58,6 +58,49 @@ class userController {
       res.status(500).json({ error: err.message });
     }
   }
+  async addCart(req, res) {
+    console.log('Welcome to add Cart controller');
+    try {
+      const user = await User.findById(req.params.userID);
+      if (!user) return res.status(400).json({ msg: 'User does not exist!' });
+      console.log(req.body.cart);
+      await User.findOneAndUpdate(
+        { _id: req.params.userID },
+        {
+          $push: { cart: req.body.cart },
+        }
+      );
+      return res.json({ msg: 'Added to cart' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+  async getCart(req, res) {
+    try {
+      const user = await User.findById(req.params.userID);
+      if (!user) return res.status(400).json({ msg: 'User does not exist!' });
+      res.json(user.cart);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+  async updateCart(req, res) {
+    console.log('Welcome to updateCart controller');
+    try {
+      const user = await User.findById(req.params.userID);
+      if (!user) return res.status(400).json({ msg: 'User does not exist!' });
+      console.log(req.body.cart);
+      await User.findOneAndUpdate(
+        { _id: req.params.userID },
+        {
+          cart: req.body.cart,
+        }
+      );
+      return res.json({ msg: 'updated  cart' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
 }
 const createAccessToken = (user) => {
   return jwt.sign(user, process.env.JWT_ACCESS_SECRET, { expiresIn: '1d' });
