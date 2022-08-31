@@ -2,10 +2,11 @@ const User = require("../models/userModel");
 const Payment = require("../models/paymentModel");
 
 exports.getPayments = async (req, res) => {
+  console.log("Welcome to the get payments");
   try {
     const user = await User.findById(req.params.userID);
-    const payments = await Payment.find();
-    res.json(payments.user_id === user._id);
+    const payments = await Payment.find({ email: user.email });
+    res.json(payments);
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
